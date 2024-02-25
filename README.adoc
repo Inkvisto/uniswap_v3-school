@@ -1,19 +1,4 @@
-=== Getting Started
-First, run the development server:
-
-----
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-----
-
-Open http://localhost:3000 with your browser to see the result.
-
-= Introduction
+= ERC-20 token standart
 ifdef::env-github[]
 :tip-caption: :bulb:
 :note-caption: :bookmark:
@@ -22,136 +7,14 @@ ifdef::env-github[]
 :warning-caption: :warning:
 endif::[]
 
-=== Next.js v14.1.0 
-In this tutorial i will use React framework for building full-stack web applications named https://nextjs.org/docs[Next.js].
-Before next steps you need to https://nextjs.org/docs/getting-started/installation[install] Next.js and read basics about it usage. If you prefer you can use just React, Next added only for ease of development.
+The ERC-20 introduces a standard for Fungible Tokens, in other words, they have a property that makes each Token be exactly the same (in type and value) as another Token. For example, an ERC-20 Token acts just like the ETH, meaning that 1 Token is and will always be equal to all the other Tokens.
 
-== Connect MetaMask wallet
-All dapps starts its life from wallet connection - so user can interact with dapp.
-Lets begin from `connectWallet` function that will connect wallet by calling https://eips.ethereum.org/EIPS/eip-1193#request-1[`window.ethereum.request`]  with https://docs.metamask.io/wallet/reference/eth_requestaccounts/[`eth_requestAccounts`] argument method:
-
-[source, js] 
-----
-'use client'
-
-export const connectWallet = async () => {
-  const provider = await window.ethereum.request({
-    "method": "eth_requestAccounts",
-    "params": []
-  });
-
-  return provider[0];
-}
-
-
-
-----
-
-
-== Header implementation
-
-Here we gonna use our function and show user him address if he successfully connected to dapp: 
-
-[source, js]
-----
-'use client'
-
-import React from "react";
-
-import { connectWallet } from "@/app/lib/web3/connectWallet";
-import { getHello } from "@/app/lib/web3/hello";
-
-const Header = () => {
-// 1
-const [account, setAccount] = React.useState(null);
-
-  const getAccount = () => {
-    (async () => {
-      // 2
-      setAccount(await connectWallet());
-    })()
-  }
-
-  return (
-    <div className="flex p-10  justify-center space-x-4">
-      // 3
-      <button className="bg-red-800 rounded p-2" onClick={getAccount}> {account ?? "Connect Wallet"}</button>
-      // 4
-      <button className="bg-blue-500 rounded p-2" onClick={getHello}>Hello</button>
-    </div>
-  )
-}
-
-export default Header;
-----
+==== Docs and popular smart contract development libraries:
 ====
-. Init https://react.dev/reference/react/useState[state variable] `account`;
-. Set `provider[0]`(your metamask account address) from `connectWallet()` function to `account` state variable;
-. Button that call `getAccount()` and show wallet user address if he successfully connected;
-. Button that call `getHello()` function of hello_world smart contract;
+- Ethereum Improvement Proposals (https://eips.ethereum.org/[EIPs]) describe standards for the Ethereum platform, including core      protocol specifications, client APIs, and contract standards.
+  https://ethereum.org/developers/docs/standards/tokens/erc-20[ERC20] 
+
+- A library for secure smart contract development: https://docs.openzeppelin.com/contracts/5.x/erc20[OpenZeppelin ERC20 implementation].
+
+- Ethereum development documentation: https://ethereum.org/developers/docs/standards/tokens/erc-20[ERC20]
 ====
-
-= Deploy base contract on Remix ide and interact with it.
-It's easy step needed just to deploy hello_world contract and get it abi, address(place where it deployed) with remix ide. Further we gonna use more complex tools like https://hardhat.org/[hardhat] or https://github.com/foundry-rs/foundry[foundry].
-
-So just open remix and deploy this code:
-
-----
-// SPDX-License-Identifier: MIT
-// compiler version must be greater than or equal to 0.8.20 and less than 0.9.0
-pragma solidity ^0.8.20;
-
-contract HelloWorld {
-    string public greet = "Hello World!";
-}
-
-----
-
-After deployment copy abi and address of deployed contract.
-For copied abi we need to create hello.json file and put it inside.
-For copied address we need to write it in getHello function below.
-
-= Contracts usage with ethers.js
-We need some simple interface to interact with(connect to) deployed contracts or deploy them from our dapp.
-The https://docs.ethers.org/v6/getting-started/[ethers.js] library aims to be a complete and compact library for interacting with the Ethereum Blockchain and its ecosystem.
-It is often used to create decentralized applications (dapps), wallets (such as MetaMask and Tally) and other tools and simple scripts that require reading and writing to the blockchain.
-
-[source, js]
-----
-import { ethers } from "ethers";
-
-// copied hello_world contract abi
-import  hello_abi  from "./hello.json";
-
-
-export const getHello = async () => {
-  if (typeof window.ethereum !== "undefined"){
-  // 1
-  const provider = new ethers.BrowserProvider(window.ethereum);
-  // 2
-  const signer = await provider.getSigner();
-  const contract = new ethers.Contract(
-  
-    // 3 deployed contract address
-    "0x0c27083c3d0d5b296cb16c44a2f2eb4c4f7ca051",
-    
-    // 4 contract ABI(Application Binary Interface)
-    hello_abi,
-    
-    signer
-  );
-  console.log(await contract.greet());
-  }
-};
-
-----
-
-====
-. https://docs.ethers.org/v6/api/providers/#Provider[Provider] interface;
-. https://docs.ethers.org/v6/api/providers/#Signer[Signer];
-. Contract https://docs.soliditylang.org/en/latest/types.html#address[address];
-. Contract https://docs.ethers.org/v6/getting-started/#starting-contracts[abi];
-
-====
-
-To finalize our code just run - `npm run dev` in console to start next project.
