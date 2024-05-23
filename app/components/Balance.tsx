@@ -11,8 +11,9 @@ const Balance = ( address:any , className = "" ) => {
     isError,
     isLoading,
   } = useBalance({
-    address,
+    address: address.address,
   });
+
 
   if (!address || isLoading || balance === null) {
     return (

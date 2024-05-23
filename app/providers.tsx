@@ -12,15 +12,10 @@ import {
   ledgerWallet,
 } from '@rainbow-me/rainbowkit/wallets';
 import {
-  arbitrum,
-  base,
-  mainnet,
-  optimism,
-  polygon,
-  sepolia,
-} from 'wagmi/chains';
+   foundry,
+   } from 'wagmi/chains';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { WagmiProvider } from 'wagmi';
+import { WagmiProvider, http } from 'wagmi';
 
 const { wallets } = getDefaultWallets();
 
@@ -35,13 +30,11 @@ const config = getDefaultConfig({
     },
   ],
   chains: [
-    mainnet,
-    polygon,
-    optimism,
-    arbitrum,
-    base,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [sepolia] : []),
+    foundry
   ],
+    transports: {
+      [foundry.id]: http("http://localhost:8545")
+    },
   ssr: true,
 });
 

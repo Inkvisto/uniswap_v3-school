@@ -1,12 +1,12 @@
 'use client'
 
-import Header from "./components/Header";
+import SwapComponent from "./components/swap-ui/swapComponent";
+
 
 export default function Home() {
-
-  return ( 
+  return (
     <div>
-      <Header />
+      <SwapComponent />
     </div>
-         );
+  );
 }

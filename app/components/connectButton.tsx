@@ -2,11 +2,11 @@
 
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useEffect, useState } from "react";
-import { UseReadContractsReturnType, useDisconnect, useReadContracts, useSwitchChain } from "wagmi";
+import { useDisconnect, useReadContract, useSwitchChain } from "wagmi";
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Link } from "@nextui-org/react";
-import { TOKEN_ADDRESSES } from "../utils/config";
 import { getBlockExplorerAddressLink, getTargetNetwork } from "../utils/network";
 import CopyToClipboard from "react-copy-to-clipboard";
+
 import {
   ArrowLeftEndOnRectangleIcon,
   ArrowsRightLeftIcon,
@@ -14,7 +14,7 @@ import {
   DocumentDuplicateIcon,
 } from "@heroicons/react/24/outline";
 import Balance from "./Balance";
-import { formatUnits } from "viem";
+import { erc20Abi, formatUnits } from "viem";
 import { Avatar } from "./Avatar";
 import { QRCodeSVG } from "qrcode.react";
 import { Address } from "./Address";
@@ -35,19 +35,21 @@ const [addressCopied, setAddressCopied] = useState(false);
           ? getBlockExplorerAddressLink(getTargetNetwork(), account.address)
           : undefined;
 
-        const token0:UseReadContractsReturnType = useReadContracts({
-          contracts: [
-            
-          {address: TOKEN_ADDRESSES[0][chain?.id as keyof (typeof TOKEN_ADDRESSES)[0]]}
-          ]
+
+        const token0 = useReadContract({
+          abi: erc20Abi,
+          address: "0xCD8a1C3ba11CF5ECfa6267617243239504a98d90",
+          functionName: "name"
         });
 
-        const token1: UseReadContractsReturnType = useReadContracts({
-          contracts: [
-            
-          {address: TOKEN_ADDRESSES[1][chain?.id as keyof (typeof TOKEN_ADDRESSES)[1]]}
-          ]
+
+        const token1= useReadContract({
+          abi: erc20Abi,
+          address: "0x82e01223d51Eb87e16A03E24687EDF0F294da6f1",
+          functionName: "name"
         });
+
+
 
 
         useEffect(() => {
@@ -123,14 +125,14 @@ const [addressCopied, setAddressCopied] = useState(false);
                       <DropdownItem>
                         <CopyToClipboard text={"0"}>
                           <div className="flex flex-col items-center">
-                            <span className="text-xs">{token0.data?.name ?? "Token0"}</span>
+                            <span className="text-xs">{token0.data ?? "Token0"}</span>
                           </div>
                         </CopyToClipboard>
                       </DropdownItem>
                       <DropdownItem>
                         <CopyToClipboard text={"0"}>
                           <div className="flex flex-col items-center">
-                            <span className="text-xs">{token1.data?.name ?? "Token1"}</span>
+                            <span className="text-xs">{token1.data ?? "Token1"}</span>
                           </div>
                         </CopyToClipboard>
                       </DropdownItem>

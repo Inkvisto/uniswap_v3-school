@@ -1,7 +1,6 @@
 
 import Image from "next/image";
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@nextui-org/react";
-import { enabledChains } from "../web3/wagmiConnectors";
 import { Chain } from "viem";
 
 export const NetworkSwitcher = () => {
@@ -13,7 +12,7 @@ export const NetworkSwitcher = () => {
         <Button variant="bordered">Switch Network</Button>
       </DropdownTrigger>
       <DropdownMenu variant="faded" aria-label="Dropdown menu for network switching">
-        {enabledChains.map((chain: Chain) => {
+        {[].map((chain: Chain) => {
           return (
             <DropdownItem
               key={chain.name}
