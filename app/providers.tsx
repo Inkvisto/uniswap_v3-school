@@ -5,17 +5,15 @@ import {
   RainbowKitProvider,
   getDefaultWallets,
   getDefaultConfig,
+  darkTheme,
 } from '@rainbow-me/rainbowkit';
-import {
-  argentWallet,
-  trustWallet,
-  ledgerWallet,
-} from '@rainbow-me/rainbowkit/wallets';
+
 import {
    foundry,
    } from 'wagmi/chains';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider, http } from 'wagmi';
+import { BlockieAvatar } from './components/scaffold-eth';
 
 const { wallets } = getDefaultWallets();
 
@@ -23,12 +21,8 @@ const config = getDefaultConfig({
   appName: 'RainbowKit demo',
   projectId: 'YOUR_PROJECT_ID',
   wallets: [
-    ...wallets,
-    {
-      groupName: 'Other',
-      wallets: [argentWallet, trustWallet, ledgerWallet],
-    },
-  ],
+    ...wallets
+     ],
   chains: [
     foundry
   ],
@@ -44,7 +38,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>{children}</RainbowKitProvider>
+        <RainbowKitProvider avatar={BlockieAvatar}
+        theme={darkTheme()}>{children}</RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );

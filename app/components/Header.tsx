@@ -1,165 +1,62 @@
 'use client'
 
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
 
-import { useRouter } from "next/navigation";
-import { useChainId } from "wagmi";
-import { Icons as icons } from "../assets/Icons";
-import {
-  Button,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-} from "@nextui-org/react";
+import { BugAntIcon } from "@heroicons/react/24/outline";
+import { RainbowKitCustomConnectButton } from "./scaffold-eth";
 
-import { hardhat } from "viem/chains";
 
-import { NetworkSwitcher } from "./NetworkSwitcher";
-import CustomConnectButton from "./connectButton";
+const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
 
-const Header = () => {
- const router = useRouter();
-  const chainId = useChainId();
-const isActiveLink = (router: any, href: string) => router.pathname === href;
-  const redirectLink = (event: any, href: string) => {
-    event.preventDefault();
-    router.push(href);
-  };
-   const navLinks = (
+  return (
+    <Link
+      href={href}
+      passHref
+      className="hover:bg-secondary hover:shadow-md focus:!bg-secondary active:!text-neutral py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col"
+    >
+      {children}
+    </Link>
+  );
+};
+
+/**
+ * Site header
+ */
+export const Header = () => {
+
+  const navLinks = (
     <>
-      <NavbarItem
-        className="cursor-pointer"
-        isActive={isActiveLink(router, "/")}
-        onClick={(event: any) => redirectLink(event, "/")}
-      >
-        Home
-      </NavbarItem>
-      <NavbarItem
-        className="cursor-pointer"
-        isActive={isActiveLink(router, "/debug")}
-        onClick={(event: any) => redirectLink(event, "/debug")}
-      >
-        Debug Contracts
-      </NavbarItem>
-
-      <Dropdown>
-        <NavbarItem>
-          <DropdownTrigger>
-            <Button
-              disableRipple
-              className="
-            bg-transparent border-0 p-0 !hover:bg-transparent hover:border-0 hover:shadow-none
-            "
-              endContent={icons.chevron}
-              radius="sm"
-              variant="light"
-            >
-              <NavbarItem
-                isActive={isActiveLink(router, "/swap-ui")}
-                // onClick={(event: any) => redirectLink(event, "/swap-ui")}
-                // // make clickable
-                className="cursor-pointer "
-              >
-                Playground
-              </NavbarItem>
-            </Button>
-          </DropdownTrigger>
-        </NavbarItem>
-        <DropdownMenu
-          aria-label="Uniswap features"
-          className="w-[340px]"
-          itemClasses={{
-            base: "gap-4",
-          }}
-        >
-          <DropdownItem
-            key="swap"
-            startContent={icons.scale}
-            description="Create a Pool on Uniswap V4"
-            onClick={(event: any) => redirectLink(event, "/swap-ui?page=initialize")}
-          >
-            Initialize Pool
-          </DropdownItem>
-          <DropdownItem
-            key="Liquidity management"
-            startContent={icons.activity}
-            description="Manage liquidity in Uniswap V4 Pools"
-            onClick={(event: any) => redirectLink(event, "/swap-ui?page=liquidity")}
-          >
-            Add Liquidity
-          </DropdownItem>
-          <DropdownItem
-            key="swap"
-            startContent={icons.flash}
-            description="Swap tokens using Uniswap V4"
-            onClick={(event: any) => redirectLink(event, "/swap-ui?page=swap")}
-          >
-            Swap
-          </DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
-      {chainId === hardhat.id && (
-        <NavbarItem
-          isActive={isActiveLink(router, "/blockexplorer")}
-          onClick={(event: any) => redirectLink(event, "/blockexplorer")}
-          className="cursor-pointer "
-        >
-          Block Explorer
-        </NavbarItem>
-      )}
+      <li>
+        <NavLink href="/">Home</NavLink>
+      </li>
+      <li>
+        <NavLink href="/debug">
+          <BugAntIcon className="h-4 w-4" />
+          Debug Contracts
+        </NavLink>
+      </li>
     </>
   );
 
-
   return (
-    <Navbar
-      shouldHideOnScroll
-      isBordered
-      maxWidth="full"
-      // className="px-10 md:px-0"
-      classNames={{
-        item: [
-          "flex",
-          "relative",
-          "h-full",
-          "items-center",
-          "data-[active=true]:after:content-['']",
-          "data-[active=true]:after:absolute",
-          "data-[active=true]:after:bottom-0",
-          "data-[active=true]:after:left-0",
-          "data-[active=true]:after:right-0",
-          "data-[active=true]:after:h-[2px]",
-          "data-[active=true]:after:rounded-[2px]",
-          "data-[active=true]:after:bg-purple-600",
-        ],
-        base: "px-10 md:px-0",
-      }}
-    >
-      <NavbarBrand>
-        <p className="font-bold text-inherit">uniswap-hook</p>
-      </NavbarBrand>
-      <NavbarContent className="sm:flex gap-4" justify="center">
-        {navLinks}
-      </NavbarContent>
-      <NavbarContent justify="end">
-        <NavbarItem>
-          <CustomConnectButton />
-        </NavbarItem>
-        <NavbarItem>
-            <NetworkSwitcher />
-        </NavbarItem>
-        <NavbarItem>
-        </NavbarItem>
-      </NavbarContent>
-    </Navbar>
+    <div className="sticky lg:static top-0 navbar bg-base-100 min-h-0 flex-shrink-0 justify-between z-20 shadow-md shadow-secondary px-0 sm:px-2">
+      <div className="navbar-start w-auto lg:w-1/2">
+        <Link href="/" passHref className="hidden lg:flex items-center gap-2 ml-4 mr-6 shrink-0">
+          <div className="flex relative w-10 h-10">
+            <Image alt="SE2 logo" className="cursor-pointer" fill src="/logo.svg" />
+          </div>
+          <div className="flex flex-col">
+            <span className="font-bold leading-tight">UniswapV4 Sandbox</span>
+            <span className="text-xs">Ethereum dev stack</span>
+          </div>
+        </Link>
+        <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">{navLinks}</ul>
+      </div>
+      <div className="navbar-end flex-grow mr-4">
+        <RainbowKitCustomConnectButton />
+      </div>
+    </div>
   );
-}
-
-
-
-
-export default Header;
+};
