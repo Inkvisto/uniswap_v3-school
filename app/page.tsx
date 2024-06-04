@@ -1,13 +1,11 @@
 'use client'
-import Link from "next/link";
-import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { MetaHeader } from "~~/components/MetaHeader";
 
+import Link from "next/link";
+import { BugAntIcon } from "@heroicons/react/24/outline";
 
 export default function Home() {
   return (
     <>
-          <MetaHeader />
       <div className="flex items-center flex-col flex-grow pt-10">
         <div className="px-5">
           <h1 className="text-center mb-8">

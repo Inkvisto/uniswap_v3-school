@@ -5,37 +5,34 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { BugAntIcon } from "@heroicons/react/24/outline";
-import { RainbowKitCustomConnectButton } from "./scaffold-eth";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
-
-const NavLink = ({ href, children }: { href: string; children: React.ReactNode }) => {
-
-  return (
-    <Link
-      href={href}
-      passHref
-      className="hover:bg-secondary hover:shadow-md focus:!bg-secondary active:!text-neutral py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col"
-    >
-      {children}
-    </Link>
-  );
-};
 
 /**
  * Site header
  */
 export const Header = () => {
 
+  const linkStyles = "hover:bg-secondary hover:shadow-md focus:!bg-secondary active:!text-neutral py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col";
+
   const navLinks = (
     <>
       <li>
-        <NavLink href="/">Home</NavLink>
+        <Link
+          href="/"
+          passHref
+          className={linkStyles}
+        >Home</Link>
       </li>
       <li>
-        <NavLink href="/debug">
+        <Link
+          href="/debug"
+          passHref
+          className={linkStyles}
+        >
           <BugAntIcon className="h-4 w-4" />
           Debug Contracts
-        </NavLink>
+        </Link>
       </li>
     </>
   );
@@ -55,7 +52,7 @@ export const Header = () => {
         <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">{navLinks}</ul>
       </div>
       <div className="navbar-end flex-grow mr-4">
-        <RainbowKitCustomConnectButton />
+        <ConnectButton />
       </div>
     </div>
   );

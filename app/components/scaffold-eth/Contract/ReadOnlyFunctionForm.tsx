@@ -3,7 +3,7 @@ import { Abi, AbiFunction } from "abitype";
 import { Address } from "viem";
 import { useReadContract } from "wagmi";
 import {
-  ContractInput,
+  InputBase,
   displayTxResult,
   getFunctionInputKey,
   getInitialFormState,
@@ -30,17 +30,18 @@ export const ReadOnlyFunctionForm = ({ contractAddress, abiFunction }: TReadOnly
 
   const inputElements = abiFunction.inputs.map((input, inputIndex) => {
     const key = getFunctionInputKey(abiFunction.name, input, inputIndex);
+    const inputProps = {
+      name: key,
+      value: form?.[key],
+      placeholder: input.name ? `${input.type} ${input.name}` : input.type,
+      onChange: (value: any) => {
+        setForm(form => ({ ...form, [key]: value }));
+      },
+    };
+  
+
     return (
-      <ContractInput
-        key={key}
-        setForm={updatedFormValue => {
-          setResult(undefined);
-          setForm(updatedFormValue);
-        }}
-        form={form}
-        stateObjectKey={key}
-        paramType={input}
-      />
+      <InputBase {...inputProps} />
     );
   });
 

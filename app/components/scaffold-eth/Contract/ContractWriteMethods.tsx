@@ -9,12 +9,8 @@ export const ContractWriteMethods = ({
   }
 
   const functionsToDisplay = (
-    (deployedContractData.abi as Abi).filter(part => part.type === "function") as AbiFunction[]
-  ).filter(fn => fn.name === "modifyPosition" || fn.name === "swap");
-
-  if (!functionsToDisplay.length) {
-    return <>No write methods</>;
-  }
+    (deployedContractData.abi as Abi).filter(c => c.name === "modifyPosition" || c.name === "swap") as AbiFunction[]
+  );
 
   return (
     <>

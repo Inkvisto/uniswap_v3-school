@@ -6,13 +6,11 @@ export const ContractReadMethods = ({ deployedContractData }: any) => {
     return null;
   }
 
+
   const functionsToDisplay = (
-    ((deployedContractData.abi || []) as Abi).filter(part => part.type === "function") as AbiFunction[]
+    ((deployedContractData.abi || []) as any).filter(c => c.name === "getLiquidity") as AbiFunction[]
   ).filter(fn =>  fn.name === "getLiquidity" && fn.inputs.length < 4);
 
-  if (!functionsToDisplay.length) {
-    return <>No read methods</>;
-  }
 
   return (
     <>

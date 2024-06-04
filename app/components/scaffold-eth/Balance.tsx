@@ -1,6 +1,6 @@
 import { Address, formatUnits } from "viem";
 import { foundry } from "viem/chains";
-import { useAccount, useBalance } from "wagmi";
+import { useBalance } from "wagmi";
 
 
 type TBalanceProps = {
@@ -36,13 +36,6 @@ export const Balance = ({ address, className = "" }: TBalanceProps) => {
   }
   
 
-  if (isError) {
-    return (
-      <div className={`border-2 border-gray-400 rounded-md px-2 flex flex-col items-center max-w-fit cursor-pointer`}>
-        <div className="text-warning">Error</div>
-      </div>
-    );
-  }
 
   const balance = formatUnits(fetchedBalanceData!.value, fetchedBalanceData!.decimals);
 

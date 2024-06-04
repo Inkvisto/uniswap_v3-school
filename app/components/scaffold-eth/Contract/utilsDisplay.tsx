@@ -1,7 +1,8 @@
 import { ReactElement } from "react";
 import { TransactionBase, TransactionReceipt, formatEther } from "viem";
-import { Address } from "~~/components/scaffold-eth";
-import { replacer } from "~~/utils/scaffold-eth/common";
+
+
+const replacer = (key: string, value: unknown) => (typeof value === "bigint" ? value.toString() : value);
 
 type DisplayContent =
   | string
@@ -35,7 +36,7 @@ export const displayTxResult = (
   }
 
   if (typeof displayContent === "string" && displayContent.indexOf("0x") === 0 && displayContent.length === 42) {
-    return asText ? displayContent : <Address address={displayContent} />;
+    return displayContent;
   }
 
   if (Array.isArray(displayContent)) {
